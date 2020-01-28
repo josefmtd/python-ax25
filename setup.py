@@ -2,7 +2,7 @@
 
 from distutils.core import setup, Extension
 
-module1 = Extension('pythonax25', libraries = ['ax25', 'ax25io'], sources = ['pythonax25.c'])
+module1 = Extension('pythonax25', libraries = ['ax25', 'ax25io'], sources = ['pythonax25module.c'])
 
 setup (name = 'pythonax25',
         version = '1.0',
