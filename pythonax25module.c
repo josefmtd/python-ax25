@@ -214,6 +214,8 @@ static PyObject *  packet_rx(PyObject* self, PyObject* args) {
                           receiveBuffer, packetSize);
 }
 
+static PyObject *PythonAx25Error;
+
 //////////////////////////////////////////
 // Define methods
 //////////////////////////////////////////
