@@ -25,7 +25,7 @@
 static PyObject * config_load_ports(PyObject* self, PyObject* args) {
     int activePort;
     activePort = ax25_config_load_ports();
-    return Py_BuildValue("i", activePort);
+    return PyLong_FromLong(activePort);
 }
 
 static PyObject * config_get_first_port(PyObject* self, PyObject* args) {
@@ -71,7 +71,7 @@ static PyObject * config_get_window(PyObject* self, PyObject* args) {
     char *portName;
     PyArg_ParseTuple(args, "s", &portName);
     window = ax25_config_get_window(portName);
-    return Py_BuildValue("i", window);
+    return PyLong_FromLong(window);
 }
 
 static PyObject * config_get_packet_length(PyObject* self, PyObject* args) {
@@ -79,7 +79,7 @@ static PyObject * config_get_packet_length(PyObject* self, PyObject* args) {
     char *portName;
     PyArg_ParseTuple(args, "s", &portName);
     packetLength = ax25_config_get_paclen(portName);
-    return Py_BuildValue("i", packetLength);
+    return PyLong_FromLong(packetLength);
 }
 
 static PyObject * config_get_baudrate(PyObject* self, PyObject* args) {
@@ -134,7 +134,7 @@ static PyObject * ntoa(PyObject* self, PyObject* args) {
 static PyObject * datagram_socket(PyObject* self, PyObject* args) {
     int fileDescriptor;
     fileDescriptor = socket(AF_AX25, SOCK_DGRAM, 0);
-    return Py_BuildValue("i", fileDescriptor);
+    return PyLong_FromLong(fileDescriptor);
 }
 
 // Using PF_PACKET Socket
@@ -142,7 +142,7 @@ static PyObject * datagram_socket(PyObject* self, PyObject* args) {
 static PyObject * packet_socket(PyObject* self, PyObject* args) {
     int fileDescriptor;
     fileDescriptor = socket(PF_PACKET, SOCK_PACKET, htons(ETH_P_AX25));
-    return Py_BuildValue("i", fileDescriptor);
+    return PyLong_FromLong(fileDescriptor);
 }
 
 // Close a socket
@@ -152,7 +152,7 @@ static PyObject * close_socket(PyObject* self, PyObject* args) {
 
   PyArg_ParseTuple(args, "i", &fileDescriptor);
   result = close(fileDescriptor);
-  return Py_BuildValue("i", result);
+  return PyLong_FromLong(result);
 }
 
 static PyObject * packet_tx(PyObject* self, PyObject* args) {
