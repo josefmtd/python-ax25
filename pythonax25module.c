@@ -109,15 +109,26 @@ static PyObject * aton_entry(PyObject* self, PyObject* args) {
 }
 
 static PyObject * ntoa(PyObject* self, PyObject* args) {
+    static PyObject * callsign;
+
     char *callsignNetwork;
     char *callsignString;
+
+    callsignNetwork = (char *) malloc(8 * sizeof(char))
+    callsignString = (char *) malloc(10 * sizeof(char))
     ax25_address *callsign = &null_ax25_address;
 
     PyArg_ParseTuple(args, "s", &callsignNetwork);
     strncpy(callsign->ax25_call, callsignNetwork, 7);
 
     callsignString = ax25_ntoa(callsign);
-    return Py_BuildValue("s", callsignString);
+
+    callsign = Py_BuildValue("s", callsignString);
+
+    free(callsignNetwork);
+    free(callsignString);
+
+    return callsign;
 }
 
 static PyObject * datagram_socket(PyObject* self, PyObject* args) {
