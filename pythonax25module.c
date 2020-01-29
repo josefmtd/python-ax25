@@ -123,7 +123,7 @@ static PyObject * ntoa(PyObject* self, PyObject* args) {
 
     callsignString = ax25_ntoa(callsign);
 
-    callsign = Py_BuildValue("s", callsignString);
+    callsignPython = Py_BuildValue("s", callsignString);
 
     free(callsignNetwork);
     free(callsignString);
