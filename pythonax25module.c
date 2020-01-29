@@ -109,7 +109,7 @@ static PyObject * aton_entry(PyObject* self, PyObject* args) {
 }
 
 static PyObject * ntoa(PyObject* self, PyObject* args) {
-    static PyObject * callsign;
+    static PyObject * callsignPython;
 
     char *callsignNetwork;
     char *callsignString;
@@ -128,7 +128,7 @@ static PyObject * ntoa(PyObject* self, PyObject* args) {
     free(callsignNetwork);
     free(callsignString);
 
-    return callsign;
+    return callsignPtyhon;
 }
 
 static PyObject * datagram_socket(PyObject* self, PyObject* args) {
