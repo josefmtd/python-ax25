@@ -114,8 +114,8 @@ static PyObject * ntoa(PyObject* self, PyObject* args) {
     char *callsignNetwork;
     char *callsignString;
 
-    callsignNetwork = (char *) malloc(8 * sizeof(char))
-    callsignString = (char *) malloc(10 * sizeof(char))
+    callsignNetwork = (char *) malloc(8 * sizeof(char));
+    callsignString = (char *) malloc(10 * sizeof(char));
     ax25_address *callsign = &null_ax25_address;
 
     PyArg_ParseTuple(args, "s", &callsignNetwork);
