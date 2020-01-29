@@ -210,7 +210,7 @@ static PyObject *  packet_rx(PyObject* self, PyObject* args) {
                                   0, &socketAddress, (socklen_t*)&addressSize);
     }
 
-    return Py_BuildValue("(is)s#", socketAddress.sa_family, socketAddress.sa_data,
+    return Py_BuildValue("(is)y#", socketAddress.sa_family, socketAddress.sa_data,
                           receiveBuffer, packetSize);
 }
 
