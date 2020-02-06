@@ -8,6 +8,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <syslog.h>
+#include <signal.h>
 #include <string.h>
 #include <time.h>
 #include <poll.h>
@@ -132,6 +134,75 @@ static PyObject * datagram_socket(PyObject* self, PyObject* args) {
     return PyLong_FromLong(fileDescriptor);
 }
 
+static PyObject * datagram_bind(PyObject* self, PyObject* args) {
+  struct full_sockaddr_ax25 src;
+  char *portcall, *srccall;
+  int len, sock, result;
+
+  PyArg_ParseTuple(args, "iss", &sock, &srccall, &portcall);
+
+  char * addr = malloc(sizeof(char*) * (strlen(srccall) + strlen(portcall) + 2));
+  sprintf(addr, "%s %s", srccall, portcall);
+
+  len = ax25_aton(addr, &src);
+
+  free(addr);
+
+  // Binding the socket to source
+  if (bind(sock, (struct sockaddr *)&src, len) == -1) {
+    result = 1;
+  }
+  else {
+    result = 0;
+  }
+
+  return PyLong_FromLong(result);
+
+}
+
+static PyObject * datagram_tx_digi(PyObject* self, PyObject* args) {
+  struct full_sockaddr_ax25 dest;
+  char *destcall = NULL, *digicall = NULL;
+  char *message;
+  int dlen, sock, result;
+
+  PyArg_ParseTuple(args, "isss", &sock, &destcall, &digicall, &message);
+
+  char * addr = malloc(sizeof(char*) * (strlen(destcall) + strlen(digicall) + 2));
+  sprintf(addr, "%s %s", destcall, digicall);
+
+  dlen = ax25_aton(addr, &dest);
+
+  free(addr);
+
+  // Send a datagram packet to socket
+  if (sendto(sock, message, strlen(message), 0, (struct sockaddr *)&dest, dlen) == -1) {
+    result = 1;
+  }
+
+  result = 0;
+  return PyLong_FromLong(result);
+}
+
+static PyObject * datagram_tx(PyObject* self, PyObject* args) {
+  struct full_sockaddr_ax25 dest;
+  char *destcall = NULL;
+  char *message;
+  int dlen, sock, result;
+
+  PyArg_ParseTuple(args, "iss", &sock, &destcall, &message);
+
+  dlen = ax25_aton(destcall, &dest);
+
+  // Send a datagram packet to socket
+  if (sendto(sock, message, strlen(message), 0, (struct sockaddr *)&dest, dlen) == -1) {
+    result = 1;
+  }
+
+  result = 0;
+  return PyLong_FromLong(result);
+}
+
 // Using PF_PACKET Socket
 
 static PyObject * packet_socket(PyObject* self, PyObject* args) {
@@ -240,6 +311,9 @@ static PyMethodDef python_ax25_functions[] = {
     {"network_to_ascii", ntoa, METH_VARARGS, ""},
     {"ascii_to_network", aton_entry, METH_VARARGS, ""},
     {"datagram_socket", datagram_socket, METH_VARARGS, ""},
+    {"datagram_bind", datagram_bind, METH_VARARGS, ""},
+    {"datagram_tx_digi", datagram_tx_digi, METH_VARARGS, ""},
+    {"datagram_tx", datagram_tx, METH_VARARGS, ""},
     {"packet_socket", packet_socket, METH_VARARGS, ""},
     {"packet_rx", packet_rx, METH_VARARGS, ""},
     {"packet_tx", packet_tx, METH_VARARGS, ""},
