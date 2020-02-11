@@ -107,7 +107,7 @@ static PyObject * aton_entry(PyObject* self, PyObject* args) {
 
     PyArg_ParseTuple(args, "s", &callsignString);
     result = ax25_aton_entry(callsignString, callsignNetwork);
-    return Py_BuildValue("is", result, callsignNetwork);
+    return Py_BuildValue("iy", result, callsignNetwork);
 }
 
 static PyObject * ntoa(PyObject* self, PyObject* args) {
